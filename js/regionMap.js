@@ -21,7 +21,7 @@ class RegionMap {
   
       vis.zoom = d3.zoom()
           .scaleExtent([1, 6])
-          .translateExtent([[20, 100], [vis.width, vis.height]])
+          .translateExtent([[vis.config.margin.left + vis.config.margin.right, vis.config.margin.top + vis.config.margin.bottom], [vis.width, vis.height]])
           .on('zoom', function() {
             vis.chartRegions.selectAll('path')
                 .attr('transform', d3.event.transform);
