@@ -13,10 +13,17 @@
     <div>
     </div>
     <div class="container-fluid">
-        <div class="col-sm-5" style="height:fit-content; min-width: 600px; max-height: 450px;">
-            <!-- Map Vis -->
-            <p>Singapore Map</p>
-            <svg id="project-map"></svg>
+        <div class="row">
+            <div class="col-sm-5" style="height:fit-content; min-width: 600px; max-height: 450px;">
+                <!-- Map Vis -->
+                <p>Singapore Map</p>
+                <svg id="project-map"></svg>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-5" style="height:fit-content; min-width: 600px; max-height: 450px;">
+                <svg id="project-type" class="type-graph"></svg>
+            </div>
         </div>
     </div>
     
@@ -24,6 +31,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="js/regionMap.js"></script>
+    <script src="js/HDBType.js"></script>
     <script src="js/project.js"></script>
 </body>
 </html>
