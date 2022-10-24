@@ -1,20 +1,22 @@
-let regionMap = new RegionMap({ parentElement: "#project-map", containerWidth: 600, containerHeight: 450 });
+let regionMap = new RegionMap({ parentElement: "#project-map", containerWidth: 600, containerHeight: 400 });
 let typeGraph = new HDBType({ parentElement: "#project-type", containerWidth: 600, containerHeight: 450 });
 
 let jsonMapping = {};
-jsonMapping["2017-"] = {file: "resale-flat-prices-based-on-registration-date-from-jan-2017-onwards.csv"};
+jsonMapping["2017-"] = { file: "resale-flat-prices-based-on-registration-date-from-jan-2017-onwards.csv" };
 
 regionMap.render();
 
 d3.csv("data/" + jsonMapping["2017-"].file).then(t => {
     let dataset = getDataset(t);
-    console.log(dataset);
     let processedData = processData(dataset);
+    let uniqueTowns = [...new Set(processedData.map(item => item.town))]
 
+    regionMap.validRegion = uniqueTowns;
     typeGraph.data = processedData;
 
     regionMap.update();
     typeGraph.update();
+
 })
 
 function processData(dataset) {
@@ -83,4 +85,9 @@ function getTimeBasedData(data) {
         };
     })
     return result;
+}
+
+function onRegionSelect(name) {
+    typeGraph.regionFocus = name;
+    typeGraph.update();
 }

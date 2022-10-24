@@ -15,6 +15,8 @@ class RegionMap {
     initVis() {
         let vis = this;
 
+        vis.validRegion = [];
+
         vis.width = vis.config.containerWidth - vis.config.margin.left - vis.config.margin.right;
         vis.height = vis.config.containerHeight - vis.config.margin.top - vis.config.margin.bottom;
         vis.colourScheme = "Default";
@@ -50,6 +52,7 @@ class RegionMap {
         vis.palette = {};
         vis.palette["Default"] = { region: "#b4a606", points: "#a20019", highlight: "#01a669" };
         vis.palette["CBF"] = { region: "#013277", points: "#ff5f98", highlight: "#b44900" };
+        vis.fillValidColor = d => vis.validRegion.includes(d.properties.PLN_AREA_N) ? vis.palette[vis.colourScheme].region : "#fff"
     }
 
     update() {
@@ -71,22 +74,32 @@ class RegionMap {
                 .attr("title", function (d) {
                     return d.properties.PLN_AREA_N;
                 })
-                .style("fill", vis.palette[vis.colourScheme].region)
+                .attr("stroke", "#808080")
+                .style("fill", vis.fillValidColor)
                 .on("mouseover", function () {
                     let region = d3.select(this);
                     region.style("fill", vis.palette[vis.colourScheme].highlight);
                 })
                 .on("mouseout", function () {
                     let region = d3.select(this);
-                    region.style("fill", vis.palette[vis.colourScheme].region);
+                    region.style("fill", vis.fillValidColor);
                 })
-                .on("click", function () {
+                .on("click", function (d) {
+                    let region = d.properties.PLN_AREA_N;
+                    if (!vis.validRegion.includes(region)) {
+                        vis.svg.transition().duration(2000).call(
+                            vis.zoom.transform,
+                            d3.zoomIdentity
+                        );
+                        return;
+                    };
                     let mouse = d3.mouse(this);
                     d3.event.stopPropagation();
                     vis.svg.transition().duration(2000).call(
                         vis.zoom.transform,
                         d3.zoomIdentity.translate(vis.width / 2, vis.height / 2).scale(4).translate(-mouse[0], -mouse[1])
                     );
+                    onRegionSelect(region);
                 })
                 .append("svg:title")
                 .text(function (d) { return d.properties.PLN_AREA_N; });
