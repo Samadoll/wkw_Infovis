@@ -8,9 +8,9 @@ regionMap.render();
 
 d3.csv("data/" + jsonMapping["2017-"].file).then(t => {
     let dataset = getDataset(t);
-    console.log(dataset)
+    console.log(dataset);
     let processedData = processData(dataset);
-    
+
     typeGraph.data = processedData;
 
     regionMap.update();
@@ -45,7 +45,7 @@ function getDatum(entry) {
     let size = +entry.floor_area_sqm;
     let year = +(entry.month.split("-")[0])
     return datum = {
-        // month: entry.month,
+        month: entry.month,
         town: entry.town,
         type: entry.flat_type,
         size: size,

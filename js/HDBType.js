@@ -52,6 +52,7 @@ class HDBType {
 		// vis.chart.append('g').call(vis.yAxis).call(g => g.selectAll("line").attr("style", "color: #D3D3D3"));
 		vis.axisY = vis.chart.append('g');
 		vis.axisG = vis.chart.append('g');
+
     }
 
     update() {
