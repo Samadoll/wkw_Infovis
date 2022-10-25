@@ -75,9 +75,9 @@ class SizeGraph {
             })
             vis.filteredData = processedData;
         }
+        vis.filteredData = vis.filteredData.sort((a, b) => (+a.size) - (+b.size));
 
         vis.yValue = d => d.price;
-
         vis.xScale = d3.scaleBand()
             .domain(vis.filteredData.map(vis.xValue))
             .range([0, vis.width])
@@ -112,14 +112,14 @@ class SizeGraph {
             .enter()
             .append('rect')
             .attr("class", "size_graph_rect")
-            .attr("id", d => `${d.town}_${d.size}`.split(" ").join(""))
+            .attr("id", d => `${d.town}_${d.size}`.split(" ").join("").replace(".", "_"))
             .attr('x', d => vis.xScale(vis.xValue(d)))
             .attr('y', d => vis.yScale(vis.yValue(d)))
             .attr('height', d => vis.height - vis.yScale(vis.yValue(d)))
             .attr('width', vis.xScale.bandwidth())
             .attr('fill', "steelblue")
-            .on("mouseover", d => d3.select(`#${d.town}_${d.size}`.split(" ").join("")).style("stroke", "#000"))
-            .on("mouseout", d => d3.select(`#${d.town}_${d.size}`.split(" ").join("")).style("stroke", null))
+            .on("mouseover", d => d3.select(`#${d.town}_${d.size}`.split(" ").join("").replace(".", "_")).style("stroke", "#000"))
+            .on("mouseout", d => d3.select(`#${d.town}_${d.size}`.split(" ").join("").replace(".", "_")).style("stroke", null))
             .append("svg:title")
             .text(d => d.price);
     }
