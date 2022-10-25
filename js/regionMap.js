@@ -91,6 +91,7 @@ class RegionMap {
                             vis.zoom.transform,
                             d3.zoomIdentity
                         );
+                        onRegionSelect(undefined)
                         return;
                     };
                     let mouse = d3.mouse(this);
