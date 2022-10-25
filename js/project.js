@@ -1,23 +1,27 @@
 let regionMap = new RegionMap({ parentElement: "#project-map", containerWidth: 600, containerHeight: 400 });
 let typeGraph = new HDBType({ parentElement: "#project-type", containerWidth: 600, containerHeight: 450 });
 let lineGraph = new LineGraph({ parentElement: "#project-line", containerWidth: 600, containerHeight: 450 });
+let sizeGraph = new SizeGraph({ parentElement: "#project-size", containerWidth: 1860, containerHeight: 450 });
 
 let jsonMapping = {};
 jsonMapping["2017-"] = { file: "resale-flat-prices-based-on-registration-date-from-jan-2017-onwards.csv" };
 
 d3.csv("data/" + jsonMapping["2017-"].file).then(t => {
     let dataset = getDataset(t);
+    let uniqueTowns = [...new Set(dataset.map(item => item.town))]
     let processedDataType = processDataType(dataset);
     let processedDataDate = processDataDate(dataset);
-    let uniqueTowns = [...new Set(dataset.map(item => item.town))]
-
+    let processedDataSize = processDataSize(dataset);
+    
     regionMap.validRegion = uniqueTowns;
     typeGraph.data = processedDataType;
     lineGraph.data = processedDataDate;
+    sizeGraph.data = processedDataSize
 
     regionMap.update();
     typeGraph.update();
     lineGraph.update();
+    sizeGraph.update();
 
 })
 
@@ -123,10 +127,57 @@ function getMonthBasedData(data) {
     return result;
 }
 
+// Size based
+function processDataSize(dataset) {
+    let regionData = dataset.reduce((group, datum) => {
+        group[datum.town] = group[datum.town] ?? [];
+        group[datum.town].push(datum);
+        return group;
+    }, {})
+    let preProcessData = {}
+    Object.entries(regionData).forEach(([key, value], _) => {
+        let sizeBasedResult = getSizeBasedData(value);
+        let sizeBasedResultAsList = Object.keys(sizeBasedResult).reduce((res, val) => res.concat(sizeBasedResult[val]), [])
+        preProcessData[key] = sizeBasedResultAsList;
+    })
+    return Object.keys(preProcessData).reduce((res, val) => res.concat(preProcessData[val]), [])
+}
+
+function getSizeBasedData(data) {
+    let grouped = data.reduce((group, datum) => {
+        group[datum.size] = group[datum.size] ?? [];
+        group[datum.size].push(datum);
+        return group;
+    }, {})
+    let result = {};
+    Object.entries(grouped).forEach(([key, value], _) => result[key] = Object.values(getSizeYearBasedData(value)));
+    return result;
+}
+
+function getSizeYearBasedData(data) {
+    let grouped = data.reduce((group, datum) => {
+        group[datum.year] = group[datum.year] ?? [];
+        group[datum.year].push(datum);
+        return group;
+    }, {})
+    let result = {};
+    Object.entries(grouped).forEach(([key, value], _) => {
+        result[key] = {
+            year: key,
+            town: value[0].town,
+            size: value[0].size,
+            price: Math.round(value.reduce((acc, datum) => acc + datum.price, 0) / value.length)
+        };
+    })
+    return result;
+}
+
 // Interaction
 function onRegionSelect(name) {
     typeGraph.regionFocus = name;
     lineGraph.regionFocus = name;
+    sizeGraph.regionFocus = name;
     typeGraph.update();
     lineGraph.update();
+    sizeGraph.update();
 }

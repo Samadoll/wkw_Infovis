@@ -191,7 +191,6 @@ class HDBType {
             .tickSize(-vis.height)
             .tickPadding(5);
 
-        // let typeGroup = vis.filteredData.map(vis.subXValue).sort((a, b) => vis.typeSet.indexOf(a) - vis.typeSet.indexOf(b));
         vis.xSubScale = d3.scaleBand()
             .domain(vis.typeSet)
             .range([0, vis.xScale.bandwidth()])
@@ -228,6 +227,6 @@ class HDBType {
             .on("mouseover", d => d3.select(`#${d.town}_${d.year}_${d.type}`.split(" ").join("")).style("stroke", "#000"))
             .on("mouseout", d => d3.select(`#${d.town}_${d.year}_${d.type}`.split(" ").join("")).style("stroke", null))
             .append("svg:title")
-            .text(d => d.avg_price_per_sqm);;
+            .text(d => d.avg_price_per_sqm);
     }
 }
