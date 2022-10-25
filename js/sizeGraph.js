@@ -15,13 +15,13 @@ class SizeGraph {
         let vis = this;
 
         vis.width = vis.config.containerWidth - vis.config.margin.left - vis.config.margin.right - 65;
-        vis.height = vis.config.containerHeight - vis.config.margin.top - vis.config.margin.bottom;
+        vis.height = vis.config.containerHeight - vis.config.margin.top;
 
         vis.regionFocus = undefined;
-        vis.year = 2020;
+        vis.year = 2017;
 
         let svg = d3.select(vis.config.parentElement).attr("width", vis.config.containerWidth).attr("height", vis.config.containerHeight);
-        vis.chart = svg.append("g").attr('transform', `translate(${75},${vis.config.margin.top})`);
+        vis.chart = svg.append("g").attr('transform', `translate(${75},0)`);
 
         vis.chart.append('text')
             .attr('class', 'axis-label')
@@ -57,9 +57,8 @@ class SizeGraph {
 
     update() {
         let vis = this;
-
         vis.filteredData = vis.data.filter(t => t.year == vis.year);
-        if (vis.regionFocus != undefined) vis.filteredData = vis.data.filter(t => t.town == vis.regionFocus);
+        if (vis.regionFocus != undefined) vis.filteredData = vis.filteredData.filter(t => t.town == vis.regionFocus);
         else {
             let groupData = vis.filteredData.reduce((group, datum) => {
                 group[datum.size] = group[datum.size] ?? [];
@@ -76,7 +75,6 @@ class SizeGraph {
             })
             vis.filteredData = processedData;
         }
-
 
         vis.yValue = d => d.price;
 
@@ -107,10 +105,13 @@ class SizeGraph {
             .style("text-anchor", "end");
         vis.axisG.call(g => g.selectAll("line").remove());
         vis.axisY.transition().duration(500).call(vis.yAxis).call(g => g.selectAll("line").attr("style", "color: #D3D3D3"))
+        vis.chart.selectAll(".size_graph_rect").remove()
 
-        vis.chart.selectAll('rect')
+        vis.chart.selectAll('.rect')
             .data(vis.filteredData)
-            .join("rect")
+            .enter()
+            .append('rect')
+            .attr("class", "size_graph_rect")
             .attr("id", d => `${d.town}_${d.size}`.split(" ").join(""))
             .attr('x', d => vis.xScale(vis.xValue(d)))
             .attr('y', d => vis.yScale(vis.yValue(d)))

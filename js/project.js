@@ -1,7 +1,7 @@
-let regionMap = new RegionMap({ parentElement: "#project-map", containerWidth: 600, containerHeight: 400 });
+let regionMap = new RegionMap({ parentElement: "#project-map", containerWidth: 600, containerHeight: 450 });
 let typeGraph = new HDBType({ parentElement: "#project-type", containerWidth: 600, containerHeight: 450 });
 let lineGraph = new LineGraph({ parentElement: "#project-line", containerWidth: 600, containerHeight: 450 });
-let sizeGraph = new SizeGraph({ parentElement: "#project-size", containerWidth: 1860, containerHeight: 450 });
+let sizeGraph = new SizeGraph({ parentElement: "#project-size", containerWidth: 1860, containerHeight: 400 });
 
 let jsonMapping = {};
 jsonMapping["2017-"] = { file: "resale-flat-prices-based-on-registration-date-from-jan-2017-onwards.csv" };
@@ -12,7 +12,7 @@ d3.csv("data/" + jsonMapping["2017-"].file).then(t => {
     let processedDataType = processDataType(dataset);
     let processedDataDate = processDataDate(dataset);
     let processedDataSize = processDataSize(dataset);
-    
+
     regionMap.validRegion = uniqueTowns;
     typeGraph.data = processedDataType;
     lineGraph.data = processedDataDate;
@@ -174,6 +174,7 @@ function getSizeYearBasedData(data) {
 
 // Interaction
 function onRegionSelect(name) {
+    $("#size-graph-title-text").text(`Average Resale Price For Different Sizes In ${name ?? "SINGAPORE"} In `)
     typeGraph.regionFocus = name;
     lineGraph.regionFocus = name;
     sizeGraph.regionFocus = name;
@@ -181,3 +182,8 @@ function onRegionSelect(name) {
     lineGraph.update();
     sizeGraph.update();
 }
+
+$("#size-graph-title-select").on("change", function () {
+    sizeGraph.year = +$(this).val();
+    sizeGraph.update();
+});

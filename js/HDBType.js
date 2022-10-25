@@ -34,11 +34,12 @@ class HDBType {
             .text('Average Price Per Square Meter (Dollars)');
 
         vis.chart.append('text')
+            .attr("id", "type-graph-title")
             .attr('class', 'axis-label')
             .attr('y', vis.height + 35)
             .attr('x', vis.width / 2)
             .attr('text-anchor', 'middle')
-            .text('Year');
+            .text('Average Price Per Square Meter For Different Room Types In SINGAPORE');
 
         vis.xValue = d => d.year;
         vis.subXValue = d => d.type;
@@ -180,6 +181,8 @@ class HDBType {
             })
             dataForMaxY = allData;
         }
+
+        d3.select("#type-graph-title").text(`Average Price Per Square Meter For Different Room Types In ${vis.regionFocus ?? "SINGAPORE"}`)
 
         vis.yValue = d => d["avg_price_per_sqm"];
 

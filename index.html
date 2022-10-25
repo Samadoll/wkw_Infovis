@@ -8,15 +8,13 @@
 </head>
 <body>
     <!-- Title and Project Info. -->
-    <h1>N/A</h1>
+    <h1 style="text-align: center;">Singapore HDB Flat Resale Price Factors</h1>
 
     <div>
     </div>
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-4" style="height:fit-content; min-width: 600px; max-height: 450px;">
-                <!-- Map Vis -->
-                <p>Singapore Map</p>
                 <svg id="project-map"></svg>
             </div>
             <div class="col-sm-4" style="height:fit-content; min-width: 600px; max-height: 450px;">
@@ -28,6 +26,15 @@
         </div>
         <div class="row">
             <div class="col-sm" style="height:fit-content; min-width: 600px; max-height: 450px;">
+                <div style="height: 50px;text-align: center;padding-top: 15px;">
+                    <span style="font: 17px sans-serif;" id="size-graph-title-text">Average Resale Price For Different Sizes In SINGAPORE In </span>
+                    <select style="height: 25px;margin-top: 5px;" id="size-graph-title-select">
+                        <option value="2017">2017</option>
+                        <option value="2018">2018</option>
+                        <option value="2019">2019</option>
+                        <option value="2020">2020</option>
+                    </select>
+                </div>
                 <svg id="project-size" class="size-graph"></svg>
             </div>
         </div>

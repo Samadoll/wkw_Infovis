@@ -30,11 +30,12 @@ class LineGraph {
             .text('Average Price Per Square Meter (Dollars)');
 
         vis.chart.append('text')
+            .attr("id", "line-graph-title")
             .attr('class', 'axis-label')
             .attr('y', vis.height + 35)
             .attr('x', vis.width / 2)
             .attr('text-anchor', 'middle')
-            .text('Month');
+            .text('Average Price Per Square Meter In SINGAPORE');
 
         vis.xValue = d => d3.timeParse("%Y-%m")(d.month);
 
@@ -73,6 +74,8 @@ class LineGraph {
             })
             vis.filteredData = processedData;
         }
+
+        d3.select("#line-graph-title").text(`Average Price Per Square Meter In ${vis.regionFocus ?? "SINGAPORE"}`)
 
         vis.yValue = d => d["avg_price_per_sqm"];
 
