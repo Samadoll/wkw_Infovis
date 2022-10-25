@@ -107,18 +107,8 @@ class LineGraph {
             .attr("stroke", "steelblue")
             .attr("stroke-width", 1.5)
             .attr("d", d3.line()
-                .x(d => {
-                    let xx = vis.xScale(vis.xValue(d))
-                    // console.log(xx);
-                    return xx;
-                })
-                .y(d => {
-                    let yy = vis.yScale(vis.yValue(d))
-                    console.log(d);
-                    console.log(vis.yValue(d));
-                    console.log(yy);
-                    return yy;
-                })
+                .x(d => vis.xScale(vis.xValue(d)))
+                .y(d => vis.yScale(vis.yValue(d)))
             )
     }
 }
