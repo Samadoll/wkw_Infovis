@@ -18,7 +18,7 @@ class SizeGraph {
         vis.height = vis.config.containerHeight - vis.config.margin.top;
 
         vis.regionFocus = undefined;
-        vis.year = 2017;
+        vis.year = 2012;
 
         let svg = d3.select(vis.config.parentElement).attr("width", vis.config.containerWidth).attr("height", vis.config.containerHeight);
         vis.chart = svg.append("g").attr('transform', `translate(${75},0)`);

@@ -5,25 +5,49 @@ let sizeGraph = new SizeGraph({ parentElement: "#project-size", containerWidth: 
 
 let jsonMapping = {};
 jsonMapping["2017-"] = { file: "resale-flat-prices-based-on-registration-date-from-jan-2017-onwards.csv" };
+jsonMapping["2015-2016"] = { file: "resale-flat-prices-based-on-registration-date-from-jan-2015-to-dec-2016.csv" };
+jsonMapping["2012-2014"] = { file: "resale-flat-prices-based-on-registration-date-from-mar-2012-to-dec-2014.csv" };
 
-d3.csv("data/" + jsonMapping["2017-"].file).then(t => {
+Promise.all([
+    d3.csv('data/' + jsonMapping["2017-"].file),
+    d3.csv('data/' + jsonMapping["2015-2016"].file),
+    d3.csv('data/' + jsonMapping["2012-2014"].file)
+]).then(files => {
+    let t = [...files[2], ...files[1], ...files[0]];
     let dataset = getDataset(t);
     let uniqueTowns = [...new Set(dataset.map(item => item.town))]
     let processedDataType = processDataType(dataset);
     let processedDataDate = processDataDate(dataset);
     let processedDataSize = processDataSize(dataset);
-
+    
     regionMap.validRegion = uniqueTowns;
     typeGraph.data = processedDataType;
     lineGraph.data = processedDataDate;
     sizeGraph.data = processedDataSize
-
+    
     regionMap.update();
     typeGraph.update();
     lineGraph.update();
     sizeGraph.update();
+});
 
-})
+//d3.csv("data/" + jsonMapping["2017-"].file).then(t => {
+//  let dataset = getDataset(t);
+//  let uniqueTowns = [...new Set(dataset.map(item => item.town))]
+//  let processedDataType = processDataType(dataset);
+//  let processedDataDate = processDataDate(dataset);
+//  let processedDataSize = processDataSize(dataset);
+//
+//  regionMap.validRegion = uniqueTowns;
+//  typeGraph.data = processedDataType;
+//  lineGraph.data = processedDataDate;
+//  sizeGraph.data = processedDataSize
+//
+//  regionMap.update();
+//  typeGraph.update();
+//  lineGraph.update();
+//  sizeGraph.update();
+//})
 
 function getDatum(entry) {
     let price = +entry.resale_price;

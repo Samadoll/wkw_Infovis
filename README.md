@@ -6,4 +6,4 @@ Run server.js
 Open "localhost:8000/project" in browser to view
 
 # Preview
-![Alt text](preview.jpg?raw=true "Preview")
+![Alt text](preview.png?raw=true "Preview")
